@@ -21,10 +21,9 @@ namespace StackOverflowClone.Controllers
         }
         public async Task<IActionResult> Index( int id)
         {
-            var thisProject = await _db.Questions.FirstOrDefaultAsync(projects => projects.QuestionId == id);
-            ViewBag.Answers = _db.Answers.Where(x => x.QuestionId == id);
+            var thisProject = await _db.Answers.Where(x => x.QuestionId == id).ToListAsync();
+            ViewBag.Question = await _db.Questions.FirstOrDefaultAsync(projects => projects.QuestionId == id);
             return View(thisProject);
-
         }
         public async Task<IActionResult> Create(int id)
         {
@@ -38,7 +37,7 @@ namespace StackOverflowClone.Controllers
             answer.User = currentUser;
             _db.Answers.Add(answer);
             _db.SaveChanges();
-            return RedirectToAction("Index", "Answer");
+            return RedirectToAction("Index", "Answer", new {id=answer.QuestionId });
         }
         public IActionResult Delete(int id)
         {
