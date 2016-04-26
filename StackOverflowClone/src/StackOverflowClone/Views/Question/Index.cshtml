@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Security.Claims
+
+@model IEnumerable<StackOverflowClone.Models.Question>
+
+<h2>Here is your list of Questions, @User.GetUserName()</h2>
+<hr />
+
+@if (Model.Any())
+{
+    <ul>
+        @foreach (var listQuestion in Model)
+        {
+            <li>@Html.DisplayFor(modelItem => listQuestion.Name) | @Html.ActionLink("Delete", "Delete", new { id = listQuestion.QuestionId }) | @Html.ActionLink("Edit", "Update", new { id = listQuestion.QuestionId })</li>
+            <ul>
+                <li>@Html.DisplayFor(modelItem => listQuestion.Description)</li>
+            </ul>
+        }
+    </ul>
+}
+else
+{
+    <p>No questions have been added yet!</p>
+}
+
+@Html.ActionLink("Create new", "Create")
+@Html.ActionLink("Return Home", "Index", "Account")

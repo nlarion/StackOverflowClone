@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Sagaru";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<StackOverflowClone.Models.Answer>
+
+<h2>List of Shapes:</h2>
+<hr />
+
+<ul>
+    @foreach (var listShape in Model)
+    {
+        <li>@Html.ActionLink(listShape.Type, "Detail", new { id = listShape.ShapeId })  | @Html.ActionLink("Delete", "Delete", new { id = listShape.ShapeId }) | @Html.ActionLink("Edit", "Update", new { id = listShape.ShapeId })</li>
+        <ul>
+            <li>Project: @Html.DisplayFor(modelItem => listShape.Project.Name)</li>
+        </ul>
+    }
+</ul>
+
+<p>@Html.ActionLink("Add a Shapes to a Project", "Create", "Shape")</p>
+<p>@Html.ActionLink("Retrun Home", "Index", "Home")</p>
