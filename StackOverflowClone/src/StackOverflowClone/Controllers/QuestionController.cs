@@ -39,14 +39,14 @@ namespace StackOverflowClone.Controllers
         }
         public IActionResult Delete(int id)
         {
-            var thisProject = _db.Questions.FirstOrDefault(projects => projects.QuestionId == id);
+            var thisProject = _db.Questions.FirstOrDefault(q => q.QuestionId == id);
             return View(thisProject);
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var thisProject = _db.Questions.FirstOrDefault(projects => projects.QuestionId == id);
+            var thisProject = await _db.Questions.FirstOrDefaultAsync(q => q.QuestionId == id);
             _db.Questions.Remove(thisProject);
             _db.SaveChanges();
             return RedirectToAction("Index");
@@ -54,13 +54,15 @@ namespace StackOverflowClone.Controllers
 
         public IActionResult Update(int id)
         {
-            var thisProject = _db.Questions.FirstOrDefault(projects => projects.QuestionId == id);
+            var thisProject = _db.Questions.FirstOrDefault(q => q.QuestionId == id);
             return View(thisProject);
         }
 
         [HttpPost]
-        public IActionResult Update(Question question)
+        public async Task<IActionResult> Update(Question question)
         {
+            var currentUser = await _userManager.FindByIdAsync(User.GetUserId());
+            question.User = currentUser;
             _db.Entry(question).State = EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Index");
