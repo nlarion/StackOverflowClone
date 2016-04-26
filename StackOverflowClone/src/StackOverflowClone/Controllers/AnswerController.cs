@@ -19,23 +19,26 @@ namespace StackOverflowClone.Controllers
             _userManager = userManager;
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index( int id)
         {
-            var currentUser = await _userManager.FindByIdAsync(User.GetUserId());
-            return View(_db.Questions.Where(x => x.User.Id == currentUser.Id));
+            var thisProject = await _db.Questions.FirstOrDefaultAsync(projects => projects.QuestionId == id);
+            ViewBag.Answers = _db.Answers.Where(x => x.QuestionId == id);
+            return View(thisProject);
+
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int id)
         {
+           ViewBag.Question = await _db.Questions.FirstOrDefaultAsync(projects => projects.QuestionId == id);
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Question question)
+        public async Task<IActionResult> Create(Answer answer)
         {
             var currentUser = await _userManager.FindByIdAsync(User.GetUserId());
-            question.User = currentUser;
-            _db.Questions.Add(question);
+            answer.User = currentUser;
+            _db.Answers.Add(answer);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Answer");
         }
         public IActionResult Delete(int id)
         {

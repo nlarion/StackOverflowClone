@@ -1,21 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Sagaru";
+    ViewData["Title"] = "StackOverflowClone";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model IEnumerable<StackOverflowClone.Models.Answer>
+@using System.Security.Claims
 
-<h2>List of Shapes:</h2>
+@*@model IEnumerable<StackOverflowClone.Models.Answer>*@
+@model StackOverflowClone.Models.Question
+
+<h2>List of Answers:</h2>
 <hr />
 
-<ul>
-    @foreach (var listShape in Model)
+<p>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</p>
+<p>@Html.DisplayNameFor(model => model.Answers): @Html.DisplayFor(model => model.Answers)</p>
+
+
+@*@if (model.Answers.Any())
     {
-        <li>@Html.ActionLink(listShape.Type, "Detail", new { id = listShape.ShapeId })  | @Html.ActionLink("Delete", "Delete", new { id = listShape.ShapeId }) | @Html.ActionLink("Edit", "Update", new { id = listShape.ShapeId })</li>
         <ul>
-            <li>Project: @Html.DisplayFor(modelItem => listShape.Project.Name)</li>
+            @foreach (var listQuestion in @Model.Answers)
+            {
+                <li>
+                    @Html.DisplayFor(modelItem => listQuestion.Name) | @Html.ActionLink("Delete", "Delete", new { id = listQuestion.AnswerId }) | @Html.ActionLink("Edit", "Update", new { id = listQuestion.AnswerId })
+                    @Html.ActionLink("Answer this question", "Index", "Answer", new { id = listQuestion.QuestionId })
+                </li>
+                <ul>
+                    <li>@Html.DisplayFor(modelItem => listQuestion.Description)</li>
+                </ul>
+            }
         </ul>
     }
-</ul>
+    else
+    {
+        <p>No Answers have been added yet!</p>
+    }*@
+ 
 
-<p>@Html.ActionLink("Add a Shapes to a Project", "Create", "Shape")</p>
-<p>@Html.ActionLink("Retrun Home", "Index", "Home")</p>
+@Html.ActionLink("Create new", "Create", new { id = Model.QuestionId})
+@Html.ActionLink("Return Home", "Index", "Account")
